@@ -1,0 +1,21 @@
+version: '3.0'
+
+services:
+  # web engine
+  api-engine:
+    build:
+      context: ./api-engine
+    environment:
+      - 'GO111MODULE=on'
+      - 'GOFLAGS=-mod=vendor'
+    restart: always
+    command: bash -c 'cd /go/src/api-engine; go mod vendor; gin run main.go'
+    volumes:
+      - ./api-engine/service:/go/src/api-engine
+    ports:
+      - "8080:3000"
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
